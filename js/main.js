@@ -8,12 +8,13 @@ console.log('Sample JavaScript #3 HW #17');
  * если число передано в функцию – счет начинается с указанного числа
  * если нет – то счет продолжается
  */
-var counter = (function () {
-  var count = 0;
-  return function () {
-  return count++;
+var counter = (function(){
+	var count = 0;
+  return function(num){
+  	count = num !== undefined ? num : count;
+  	return count++;
   }
-  }());
+}());
 
 console.log(counter()); // 0
 console.log(counter()); // 1
@@ -23,7 +24,6 @@ console.log(counter(500)); // 500
 console.log(counter()); // 501
 console.log(counter(0)); // 0
 console.log(counter()); // 1
-
 /*
  * #2
  *
@@ -35,33 +35,36 @@ console.log(counter()); // 1
  * counting.decrement() – уменьшает значение счетчика на 1
  */
 
-// console.log(counting.value()); // 0
-
-// counting.increment();
-
-// counting.increment();
-
-// counting.increment();
-
-// console.log(counting.value()); // 3
-
-// counting.decrement();
-
-// counting.decrement();
-
-// console.log(counting.value()); // 1
-
-// console.log(counting.value(100)); // 100
-
-// counting.decrement();
-
-// console.log(counting.value()); // 99
-
-// console.log(counting.value(200)); // 200
-
-// counting.increment();
-
-// console.log(counting.value()); // 201
+var counting = (
+  function () {
+    var count = 0;
+    return {
+      value(num) {
+        if (num !== undefined) count = num;
+        return count;
+      },
+      decrement () {
+        count--;
+      },
+      increment () {
+        count++;
+      }
+    };
+  }());
+console.log(counting.value()); // 0
+counting.increment();
+counting.increment();
+counting.increment();
+console.log(counting.value()); // 3
+counting.decrement();
+counting.decrement();
+console.log(counting.value()); // 1
+console.log(counting.value(100)); // 100
+counting.decrement();
+console.log(counting.value()); // 99
+console.log(counting.value(200)); // 200
+counting.increment();
+console.log(counting.value()); // 201
 
 /*
  * #3
@@ -75,9 +78,16 @@ console.log(counter()); // 1
  * console.log(myPow(2, 3, myPrint)); // 2^3=8
  */
 
-//  console.log(myPow(3, 4, myPrint)); // 3^4=81
-
-// console.log(myPow(2, 3, myPrint)); // 2^3=8
+let myPrint = (a, b, res) => `${a}^${b}=${res}`;
+let myPow = (a, b, callback) => {
+  let pow = (x, n) => {
+    if (n !== 1) return x *= pow(x, n - 1);
+    return x;
+  };
+  return callback(a, b, pow(a, b));
+};
+ console.log(myPow(3, 4, myPrint)); // 3^4=81
+ console.log(myPow(2, 3, myPrint)); // 2^3=8
 
 /*
  * #4
